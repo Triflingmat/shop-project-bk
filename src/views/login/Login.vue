@@ -29,7 +29,6 @@
     import {ref} from 'vue'
     import { login } from '@/api/login'
     import { useUserStore } from '@/stores/user'
-import { ca } from 'element-plus/es/locale/index.mjs'
 
     const userdata = ref(
         {
@@ -44,9 +43,16 @@ import { ca } from 'element-plus/es/locale/index.mjs'
     async function Login(){
         try{
             const {userData,token} = await login(userdata.value.username,userdata.value.password);
+            if(userData.power === 3){
+                errorMsg.value = '权限不足'
+                isError.value = true
+                return
+            }
             userStore.login(userData,token)
             router.push('/home')
-        }catch(error){
+        }catch(error:any){
+            errorMsg.value = error.message
+            isError.value = true
             console.log(error)
         }
     }

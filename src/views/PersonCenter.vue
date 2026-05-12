@@ -95,7 +95,7 @@ function Reset() {
         () => {},
         ref(false)
       )
-      userStore.login(userData)
+      userStore.login(userData,userStore.token)
     })
     .catch(() => {})
 }
