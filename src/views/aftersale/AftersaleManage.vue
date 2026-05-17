@@ -41,7 +41,7 @@
           cancel-button-text="No"
           title="是否通过审核？"
           @confirm="checkConfirm(scope.row)"
-          @cancel="scope.row.status = 3"
+          @cancel="checkCancel(scope.row)"
         >
           <template #reference>
         <el-button size="small" type="primary" :disabled="scope.row.status !== 1">
@@ -193,6 +193,12 @@ const UpdateAfterSalesData = async ()=>{
 
 const checkConfirm = (row:afterSales)=>{
   row.status = 2
+  editRowData.value = row
+  UpdateAfterSalesData()
+}
+
+const checkCancel = (row:afterSales)=>{
+  row.status = 3
   editRowData.value = row
   UpdateAfterSalesData()
 }

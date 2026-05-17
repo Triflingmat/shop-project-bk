@@ -11,12 +11,10 @@ request.interceptors.request.use(
 (config) => {
     // 从本地获取 token
     const token = localStorage.getItem("token");
-    console.log("获取到的token:", token);
     
     // 如果有 token，就自动放入请求头 Authorization
     if (token) {
         config.headers.Authorization = token;
-        console.log("设置Authorization头:", token);
     }
     
     return config;

@@ -71,6 +71,7 @@
           </RouterView></el-main>
     </el-container>
   </el-container>
+  <AiChat />
 </template>
 
 <script lang="ts" setup name="Layout">
@@ -80,6 +81,7 @@
   import router from '@/router/index'
   import { useUserStore } from '@/stores/user'
   import {ref} from 'vue'
+  import  AiChat from '@/components/AiChat.vue'
 
   const userStore = useUserStore();
   const isCollapse = ref(false)
