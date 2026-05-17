@@ -1,6 +1,6 @@
 import axios from "axios";
 
-const VITE_API_URL = "http://39.106.151.177:8082"
+const VITE_API_URL = "http://triflingmat.icu:8082"
 
 const request = axios.create({
     baseURL:VITE_API_URL + '/api',
