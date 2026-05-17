@@ -1,61 +1,49 @@
 <template>
   <h3 style="margin-top: -10px;">主页控制台</h3>
-  <el-row justify="space-around" :gutter="40">
-    <el-col :span="6">
-      <div  class="card"  style="height: 220px;">
-        <div style="display: flex;justify-content:center;"><el-statistic title="总用户量" :value="userValue" /></div>
-        <hr class="line">
-        <div style="display: flex;justify-content: space-between;"><h4>总用户量</h4><h4>{{ userData.length }}</h4></div>
-      </div>
-    </el-col>
-    <el-col :span="6">
-      <div  class="card"  style="height: 220px;">
-        <div style="display: flex;justify-content:center;"><el-statistic title="总订单量" :value="orderValue" /></div>
-        <hr class="line">
-        <div style="display: flex;justify-content: space-between;"><h4>转化率</h4><h4>{{ transform.toFixed(2) }}%</h4></div>
-      </div>
-    </el-col>
-    <el-col :span="6">
-      <div  class="card"  style="height: 220px;">
+  <div class="dashboard-grid">
+    <!-- 统计卡片 -->
+    <div class="card stat-card">
+      <div style="display: flex;justify-content:center;"><el-statistic title="总用户量" :value="userValue" /></div>
+      <hr class="line">
+      <div style="display: flex;justify-content: space-between;"><h4>总用户量</h4><h4>{{ userData.length }}</h4></div>
+    </div>
+    <div class="card stat-card">
+      <div style="display: flex;justify-content:center;"><el-statistic title="总订单量" :value="orderValue" /></div>
+      <hr class="line">
+      <div style="display: flex;justify-content: space-between;"><h4>转化率</h4><h4>{{ transform.toFixed(2) }}%</h4></div>
+    </div>
+    <div class="card stat-card">
       <div style="display: flex;justify-content:center;"><el-statistic title="总销售额" :value="revenueValue" /></div>
-        <hr class="line">
-        <div style="display: flex;justify-content: space-between;"><h4>已支付订单</h4><h4>{{ finshedOrder+pendingOrder }}</h4></div>
-      </div>
-    </el-col>
-    <el-col :span="6">
-    <div class="card"  style="height: 220px;">
+      <hr class="line">
+      <div style="display: flex;justify-content: space-between;"><h4>已支付订单</h4><h4>{{ finshedOrder+pendingOrder }}</h4></div>
+    </div>
+    <div class="card stat-card">
       <div style="display: flex;justify-content:center;"><el-statistic title="总商品量" :value="goodsValue" /></div>
-        <hr class="line">
-        <div style="display: flex;justify-content: space-between;"><h4>商品类型种类</h4><h4>{{ goodsCategoryData.length }}</h4></div>
+      <hr class="line">
+      <div style="display: flex;justify-content: space-between;"><h4>商品类型种类</h4><h4>{{ goodsCategoryData.length }}</h4></div>
+    </div>
+
+    <!-- 饼图（左侧，跨两行） -->
+    <div class="card chart-center pie-chart" ref="chartRef2"></div>
+
+    <!-- 右侧面板：4个快捷按钮 + 柱状图 -->
+    <div class="right-panel">
+      <div class="card shortcut-card">
+        <button class="btn" @click="UserManage"><el-icon style="font-size: 40px;margin-top: 20px;"><Avatar /></el-icon><h4>用户管理</h4></button>
       </div>
-    </el-col>
-  </el-row>
-  <el-row :gutter="40">
-    <el-col :span="12">
-      <div class="card chart-center" style="height: 420px;margin-top: 20px;" ref="chartRef2"> </div>
-    </el-col>
-    <el-col :span="3">
-      <div class="card" style="height: 100px;justify-content: center;display: flex;align-items: center;margin-top: 20px;"><button class="btn" @click="UserManage"><el-icon style="font-size: 40px;margin-top: 20px;"><Avatar /></el-icon><h4>用户管理 </h4></button>
+      <div class="card shortcut-card">
+        <button class="btn" @click="GoodsManage"><el-icon style="font-size: 40px;margin-top: 20px;"><Sell /></el-icon><h4>商品管理</h4></button>
       </div>
-    </el-col>
-    <el-col :span="3">
-        <div class="card" style="height: 100px;justify-content: center;display: flex;align-items: center;margin-top: 20px;"><button class="btn" @click="GoodsManage"><el-icon style="font-size: 40px;margin-top: 20px;"><Sell /></el-icon><h4>商品管理 </h4></button>
+      <div class="card shortcut-card">
+        <button class="btn" @click="OrderManage"><el-icon style="font-size: 40px;margin-top: 20px;"><ShoppingCart /></el-icon><h4>订单管理</h4></button>
       </div>
-    </el-col>
-    <el-col :span="3">
-        <div class="card" style="height: 100px;justify-content: center;display: flex;align-items: center;margin-top: 20px;"><button class="btn" @click="OrderManage"><el-icon style="font-size: 40px;margin-top: 20px;"><ShoppingCart /></el-icon><h4>订单管理 </h4></button>
+      <div class="card shortcut-card">
+        <button class="btn" @click="AftersaleManage"><el-icon style="font-size: 40px;margin-top: 20px;"><Comment /></el-icon><h4>售后管理</h4></button>
       </div>
-    </el-col>
-    <el-col :span="3">
-        <div class="card" style="height: 100px;justify-content: center;display: flex;align-items: center;margin-top: 20px;"><button class="btn" @click="AftersaleManage"><el-icon style="font-size: 40px;margin-top: 20px;"><Comment /></el-icon><h4>售后管理 </h4></button>
-      </div>
-    </el-col>
-  </el-row>
-  <el-row :gutter="40">
-    <el-col :span="24">
-      <div class="card chart-center"  style="height: 235px; margin-top: -300px;margin-left: 51.5%;" ref="chartRef"></div>
-    </el-col>
-  </el-row>
+      <!-- 柱状图 -->
+      <div class="card chart-center bar-chart" ref="chartRef"></div>
+    </div>
+  </div>
 </template>
 
 <script lang="ts" setup name="home">
@@ -293,11 +281,49 @@ const revenueValue = useTransition(totalRevenue, {
 </script>
 
 <style scoped>
-    /* CSS */
+    /* ===== Grid 布局 ===== */
+    .dashboard-grid {
+      display: grid;
+      grid-template-columns: repeat(8, 1fr);
+      gap: 20px;
+    }
+
+    .stat-card {
+      grid-column: span 2;
+      height: 220px;
+    }
+
+    .pie-chart {
+      grid-column: span 4;
+      grid-row: span 2;
+      min-height: 420px;
+    }
+
+    /* 右侧面板：嵌套 grid，上半放4个快捷按钮，下半放柱状图 */
+    .right-panel {
+      grid-column: span 4;
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 20px;
+      align-content: start;
+    }
+
+    .shortcut-card {
+      height: 100px;
+      justify-content: center;
+      display: flex;
+      align-items: center;
+    }
+
+    .bar-chart {
+      grid-column: span 4;
+      height: 235px;
+    }
+
+    /* ===== 通用样式 ===== */
     .card{
         background-color: white;
         box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
-        margin-bottom: 20px;
         flex-direction: column;
         justify-content: center;
         display: flex;
@@ -331,7 +357,60 @@ const revenueValue = useTransition(totalRevenue, {
       transition: all 0.3s ease;
     }
     :deep(.el-statistic) {
-  --el-statistic-title-font-size: 20px;
-  --el-statistic-content-font-size: 40px;
-}
+      --el-statistic-title-font-size: 20px;
+      --el-statistic-content-font-size: 40px;
+    }
+
+    /* ===== 移动端媒体查询 ===== */
+    @media(max-width: 768px) {
+      .dashboard-grid {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 10px;
+      }
+
+      .stat-card {
+        grid-column: span 1;
+        height: auto;
+        padding: 10px;
+      }
+
+      .pie-chart {
+        grid-column: span 2;
+        grid-row: auto;
+        height: 250px;
+      }
+
+      .right-panel {
+        grid-column: span 2;
+        grid-template-columns: repeat(2, 1fr);
+        gap: 10px;
+      }
+
+      .shortcut-card {
+        grid-column: span 1;
+        height: 80px;
+      }
+
+      .bar-chart {
+        grid-column: span 2;
+        height: 250px;
+      }
+
+      .card {
+        padding: 10px;
+      }
+
+      .card:hover {
+        transform: scale(1.02);
+      }
+
+      :deep(.el-statistic) {
+        --el-statistic-title-font-size: 14px;
+        --el-statistic-content-font-size: 28px;
+      }
+
+      h4 {
+        font-size: 14px;
+      }
+    }
 </style>

@@ -80,7 +80,7 @@
   import { ArrowDown , UserFilled,GoodsFilled,List,PhoneFilled,User,Key,Handbag,Document,Service,Menu, ShoppingTrolley,Fold} from '@element-plus/icons-vue'
   import router from '@/router/index'
   import { useUserStore } from '@/stores/user'
-  import {ref} from 'vue'
+  import {ref, onMounted, onUnmounted} from 'vue'
   import  AiChat from '@/components/AiChat.vue'
 
   const userStore = useUserStore();
@@ -91,6 +91,20 @@
   function updateDefaultActive(activeItem:string) {
   defaultActive.value = activeItem;
 }
+
+  // 响应式折叠：屏幕宽度 <= 768px 时自动折叠侧边栏
+  function handleResize() {
+    isCollapse.value = window.innerWidth <= 768;
+  }
+
+  onMounted(() => {
+    handleResize();
+    window.addEventListener('resize', handleResize);
+  });
+
+  onUnmounted(() => {
+    window.removeEventListener('resize', handleResize);
+  });
 
   //function
   function ToPersonCenter(){
@@ -220,5 +234,19 @@ h3 {
   font-size: 16px;
   font-weight: 400;
   color: #666666;
+}
+
+@media(max-width: 768px) {
+  .divheader {
+    flex-direction: column;
+    height: auto;
+    padding: 10px;
+  }
+  .divaside {
+    width: 64px;
+    height: auto;
+    margin: 10px 0;
+  }
+
 }
 </style>
