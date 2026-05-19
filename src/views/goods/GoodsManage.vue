@@ -93,7 +93,6 @@
       </el-form-item>
       <el-form-item label="商品分类：" prop="category_id">
            <el-select v-model="editRowData.category_id" placeholder="请选择分类" >
-            <el-option label="全部分类" :value="0" />
     <el-option
       v-for="item in categoryList"
       :key="item.id"
@@ -103,7 +102,7 @@
   </el-select>
       </el-form-item>
       <el-form-item label="商品库存：" prop="stock">
-        <el-input v-model="editRowData.stock" autocomplete="off" />
+        <el-input v-model.number="editRowData.stock" autocomplete="off" />
       </el-form-item>
       <el-form-item label="商品描述：" prop="goods_desc">
         <el-input v-model="editRowData.goods_desc" autocomplete="off" />
@@ -142,7 +141,6 @@
       </el-form-item>
       <el-form-item label="商品分类：" prop="category_id">
            <el-select v-model="newGoodsData.category_id" placeholder="请选择分类" >
-            <el-option label="全部分类" :value="0" />
     <el-option
       v-for="item in categoryList"
       :key="item.id"
@@ -152,7 +150,7 @@
   </el-select>
       </el-form-item>
       <el-form-item label="商品库存：" prop="stock">
-        <el-input v-model="newGoodsData.stock" autocomplete="off" />
+        <el-input v-model.number="newGoodsData.stock" autocomplete="off" />
       </el-form-item>
       <el-form-item label="商品描述：" prop="goods_desc">
         <el-input v-model="newGoodsData.goods_desc" autocomplete="off" />
@@ -207,17 +205,57 @@ const updateRules = {
   ],
   price: [
     { required: true, message: '请输入商品价格', trigger: 'blur' },
-    { type: 'number', message: '请输入数字', trigger: 'blur' },
-    { min: 0, message: '价格不能为负数', trigger: 'blur' }
+    {
+      validator: (_rule: any, value: any, callback: any) => {
+        const num = Number(value)
+        if (value === '' || value === null || value === undefined) {
+          callback()
+          return
+        }
+        if (isNaN(num)) {
+          callback(new Error('请输入有效数字'))
+        } else if (num < 0) {
+          callback(new Error('价格不能为负数'))
+        } else {
+          callback()
+        }
+      },
+      trigger: 'blur'
+    }
   ],
   category_id: [
     { required: true, message: '请选择商品分类', trigger: 'change' },
-    { min: 1, message: '请选择有效的分类', trigger: 'change' }
+    {
+      validator: (_rule: any, value: any, callback: any) => {
+        const num = Number(value)
+        if (isNaN(num) || num <= 0) {
+          callback(new Error('请选择有效的分类'))
+        } else {
+          callback()
+        }
+      },
+      trigger: 'change'
+    }
   ],
   stock: [
     { required: true, message: '请输入商品库存', trigger: 'blur' },
-    { type: 'number', message: '请输入数字', trigger: 'blur' },
-    { min: 0, message: '库存不能为负数', trigger: 'blur' }
+    {
+      validator: (_rule: any, value: any, callback: any) => {
+        const num = Number(value)
+        if (value === '' || value === null || value === undefined) {
+          callback()
+          return
+        }
+        if (isNaN(num) || !Number.isInteger(num)) {
+          callback(new Error('请输入有效整数'))
+        } else if (num < 0) {
+          callback(new Error('库存不能为负数'))
+        } else {
+          callback()
+        }
+      },
+      trigger: 'blur'
+    }
   ],
   goods_desc: [
     { required: true, message: '请输入商品描述', trigger: 'blur' },
@@ -236,17 +274,57 @@ const createRules = {
   ],
   price: [
     { required: true, message: '请输入商品价格', trigger: 'blur' },
-    { type: 'number', message: '请输入数字', trigger: 'blur' },
-    { min: 0, message: '价格不能为负数', trigger: 'blur' }
+    {
+      validator: (_rule: any, value: any, callback: any) => {
+        const num = Number(value)
+        if (value === '' || value === null || value === undefined) {
+          callback()
+          return
+        }
+        if (isNaN(num)) {
+          callback(new Error('请输入有效数字'))
+        } else if (num < 0) {
+          callback(new Error('价格不能为负数'))
+        } else {
+          callback()
+        }
+      },
+      trigger: 'blur'
+    }
   ],
   category_id: [
     { required: true, message: '请选择商品分类', trigger: 'change' },
-    { min: 1, message: '请选择有效的分类', trigger: 'change' }
+    {
+      validator: (_rule: any, value: any, callback: any) => {
+        const num = Number(value)
+        if (isNaN(num) || num <= 0) {
+          callback(new Error('请选择有效的分类'))
+        } else {
+          callback()
+        }
+      },
+      trigger: 'change'
+    }
   ],
   stock: [
     { required: true, message: '请输入商品库存', trigger: 'blur' },
-    { type: 'number', message: '请输入数字', trigger: 'blur' },
-    { min: 0, message: '库存不能为负数', trigger: 'blur' }
+    {
+      validator: (_rule: any, value: any, callback: any) => {
+        const num = Number(value)
+        if (value === '' || value === null || value === undefined) {
+          callback()
+          return
+        }
+        if (isNaN(num) || !Number.isInteger(num)) {
+          callback(new Error('请输入有效整数'))
+        } else if (num < 0) {
+          callback(new Error('库存不能为负数'))
+        } else {
+          callback()
+        }
+      },
+      trigger: 'blur'
+    }
   ],
   goods_desc: [
     { required: true, message: '请输入商品描述', trigger: 'blur' },
@@ -341,7 +419,7 @@ const CreateGoodsData = async ()=>{
 //更改数据
 const dialogUpdateVisible = ref(false)
 const handleEdit = (row:Goods)=>{
-  editRowData.value = row;
+  editRowData.value = { ...row };
   dialogUpdateVisible.value = true
 }
 const UpdateGoodsData = async (goods:Goods)=>{
